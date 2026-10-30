@@ -1,7 +1,9 @@
 import datetime
+import json
 import math
 import os
 import sys
+import tempfile
 
 import arrow
 import polyline as polyline_codec
@@ -128,12 +130,41 @@ class Generator:
         self.client_id = ""
         self.client_secret = ""
         self.refresh_token = ""
+        self.credentials_file = None
         self.only_run = False
 
-    def set_strava_config(self, client_id, client_secret, refresh_token):
+    def set_strava_config(
+        self, client_id, client_secret, refresh_token, credentials_file=None
+    ):
         self.client_id = client_id
         self.client_secret = client_secret
         self.refresh_token = refresh_token
+        self.credentials_file = credentials_file
+
+    def save_strava_credentials(self):
+        if not self.credentials_file:
+            return
+
+        credentials = {
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "refresh_token": self.refresh_token,
+        }
+
+        directory = os.path.dirname(self.credentials_file)
+        fd, temp_path = tempfile.mkstemp(dir=directory, prefix=".strava-", text=True)
+
+        try:
+            with os.fdopen(fd, "w") as f:
+                json.dump(credentials, f)
+                f.write("\n")
+
+            os.chmod(temp_path, 0o600)
+            os.replace(temp_path, self.credentials_file)
+            os.chmod(self.credentials_file, 0o600)
+        finally:
+            if os.path.exists(temp_path):
+                os.unlink(temp_path)
 
     def check_access(self):
         response = self.client.refresh_access_token(
@@ -146,6 +177,10 @@ class Generator:
         self.refresh_token = response["refresh_token"]
 
         self.client.access_token = response["access_token"]
+
+        # Persistir el refresh token rotado antes de iniciar la sincronización.
+        self.save_strava_credentials()
+
         print("Access ok")
 
     def sync(self, force):
