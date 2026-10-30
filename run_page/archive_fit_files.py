@@ -24,7 +24,7 @@ def archive_from_list():
 
     # Read processed file names from txt file
     with open(LIST_FILE, "r", encoding="utf-8") as f:
-        processed_filenames = set(line.strip() for line in f if line.strip())
+        processed_filenames = {line.strip() for line in f if line.strip()}
 
     print(f"Loaded {len(processed_filenames)} target filenames from {LIST_FILE.name}")
 

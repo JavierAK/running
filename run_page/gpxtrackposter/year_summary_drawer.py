@@ -310,7 +310,7 @@ class YearSummaryDrawer(TracksDrawer):
             return 0
 
         # Get unique dates
-        dates = sorted(set(t.start_time_local.date() for t in tracks))
+        dates = sorted({t.start_time_local.date() for t in tracks})
         if not dates:
             return 0
 

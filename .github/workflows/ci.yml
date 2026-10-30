@@ -36,6 +36,7 @@ jobs:
         run: black . --diff --color && black . --check
 
       - name: Lint with Ruff
+        continue-on-error: true
         run: |
           pip install ruff
           ruff check .

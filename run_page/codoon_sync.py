@@ -202,7 +202,7 @@ def tcx_output(fit_array, run_data):
         # HeartRateBpm
         # None was converted to bytes by np.dtype, becoming a string "None" after decode...-_-
         # as well as LatitudeDegrees and LongitudeDegrees below
-        if not bytes.decode(i["bpm"]) == "None":
+        if bytes.decode(i["bpm"]) != "None":
             bpm = ET.Element("HeartRateBpm")
             bpm_value = ET.Element("Value")
             bpm.append(bpm_value)
@@ -211,12 +211,12 @@ def tcx_output(fit_array, run_data):
         # Cadence
         # The unit is step-per-minute in Garmin
         # but is stride-per-minute in Strava, Coros, and RQrun
-        if not bytes.decode(i["step"]) == "None":
+        if bytes.decode(i["step"]) != "None":
             step = ET.Element("Cadence")
             step.text = bytes.decode(i["step"])
             tp.append(step)
         # Position
-        if not bytes.decode(i["lati"]) == "None":
+        if bytes.decode(i["lati"]) != "None":
             position = ET.Element("Position")
             tp.append(position)
             #   LatitudeDegrees
@@ -373,7 +373,9 @@ class CodoonAuth:
 
             self.token = r.json()["access_token"]
 
-    def reload(self, params={}, token=""):
+    def reload(self, params=None, token=""):
+        if params is None:
+            params = {}
         self.params = params
         if token:
             self.token = token
@@ -565,7 +567,7 @@ class Codoon:
         if not start_time:
             return
         end_time = run_data["end_time"]
-        run_points_data = run_data["points"] if "points" in run_data else None
+        run_points_data = run_data.get("points", None)
 
         latlng_data = self.parse_latlng(run_points_data)
         if TRANS_GCJ02_TO_WGS84:
@@ -602,7 +604,7 @@ class Codoon:
         # only support run now, if you want all type comments these two lines
         if IS_ONLY_RUN and sport_type != 1:
             return
-        cast_type = TYPE_DICT[sport_type] if sport_type in TYPE_DICT else sport_type
+        cast_type = TYPE_DICT.get(sport_type, sport_type)
         if not run_data["total_time"]:
             print(f"ID {log_id} has no total time just ignore please check")
             return

@@ -94,7 +94,9 @@ class JoyrunAuth:
         self.uid = uid
         self.sid = sid
 
-    def reload(self, params={}, uid=0, sid=""):
+    def reload(self, params=None, uid=0, sid=""):
+        if params is None:
+            params = {}
         self.params = params
         if uid and sid:
             self.uid = uid
@@ -184,7 +186,7 @@ class Joyrun:
 
     def __update_loginInfo(self):
         self.auth.reload(uid=self.uid, sid=self.sid)
-        loginCookie = "sid=%s&uid=%s" % (self.sid, self.uid)
+        loginCookie = f"sid={self.sid}&uid={self.uid}"
         self.session.headers.update({"ypcookie": loginCookie})
         self.session.cookies.clear()
         self.session.cookies.set("ypcookie", quote(loginCookie).lower())

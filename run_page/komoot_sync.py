@@ -53,7 +53,7 @@ class KomootApi:
         if r.status_code != 200:
             print("Error " + str(r.status_code) + ": " + str(r.json()))
             if critical:
-                exit(1)
+                sys.exit(1)
         return r
 
     def login(self, email, password):
@@ -361,10 +361,7 @@ def is_tour_in_date_range(tour, start_date, end_date):
         return False
 
     # If both dates are provided, ensure tour is within range
-    if start_date and end_date and (tour_date < start_date or tour_date > end_date):
-        return False
-
-    return True
+    return not (start_date and end_date and (tour_date < start_date or tour_date > end_date))
 
 
 def date_filter(tours, start_date, end_date):
@@ -400,8 +397,7 @@ def make_gpx(tour_id, api, no_poi, tour_base):
     fullname = f"{tour_id}.gpx"
     path = f"{GPX_FOLDER}/{fullname}"
 
-    if fullname in output_dir_contents:
-        output_dir_contents.remove(fullname)
+    output_dir_contents.discard(fullname)
 
     if os.path.exists(path):
         print(f"{fullname} already exists, skipped")

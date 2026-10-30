@@ -33,7 +33,7 @@ def get_to_generate_files(last_time):
         for i in gpx_files
         if int(i[0].get_time_bounds()[0].timestamp()) > last_time
     }
-    return sorted(list(gpx_files_dict.keys())), gpx_files_dict
+    return sorted(gpx_files_dict.keys()), gpx_files_dict
 
 
 if __name__ == "__main__":

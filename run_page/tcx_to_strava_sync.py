@@ -28,7 +28,7 @@ def get_to_generate_files(last_time):
         and int(i[0].trackpoints[0].time.timestamp()) > last_time
     }
 
-    return sorted(list(tcx_files_dict.keys())), tcx_files_dict
+    return sorted(tcx_files_dict.keys()), tcx_files_dict
 
 
 if __name__ == "__main__":

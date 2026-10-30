@@ -139,7 +139,7 @@ def _render_bar_chart(
         filled = (
             0
             if max_value <= 0
-            else int(round(float(value) / float(max_value) * bar_width))
+            else round(float(value) / float(max_value) * bar_width)
         )
         if value > 0:
             filled = max(1, filled)

@@ -373,16 +373,16 @@ class Track:
         )
         self.length = message["total_distance"]
         self.average_heartrate = (
-            message["avg_heart_rate"] if "avg_heart_rate" in message else None
+            message.get("avg_heart_rate", None)
         )
         if message["sport"].lower() == "running":
             self.type = "Run"
         else:
             self.type = message["sport"].lower()
-        self.subtype = message["sub_sport"] if "sub_sport" in message else None
+        self.subtype = message.get("sub_sport", None)
 
         self.elevation_gain = (
-            message["total_ascent"] if "total_ascent" in message else None
+            message.get("total_ascent", None)
         )
         # moving_dict
         self.moving_dict["distance"] = message["total_distance"]

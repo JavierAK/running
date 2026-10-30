@@ -120,12 +120,12 @@ if __name__ == "__main__":
     # Extend and Save the successfully uploaded log to the backup file.
     content.extend(
         [
-            dict(
-                run_id=track.id,
-                name=track.name,
-                type=track.type,
-                gpx_file_path=track.gpx_file_path,
-            )
+            {
+                "run_id": track.id,
+                "name": track.name,
+                "type": track.type,
+                "gpx_file_path": track.gpx_file_path,
+            }
             for track in uploaded_file_paths
         ]
     )

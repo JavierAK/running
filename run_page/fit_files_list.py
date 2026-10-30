@@ -4,6 +4,7 @@ Created on Mon Aug  3 16:31:50 2026
 @author: irvin
 """
 
+import sys
 from pathlib import Path
 
 # Adjust this path to wherever your backup FIT_OUT folder is located
@@ -15,7 +16,7 @@ if not BACKUP_FIT_OUT.exists():
     print(
         f"Error: Directory '{BACKUP_FIT_OUT}' not found. Please update BACKUP_FIT_OUT path."
     )
-    exit(1)
+    sys.exit(1)
 
 # Find all .fit / .FIT files
 fit_files = [f.name for f in BACKUP_FIT_OUT.iterdir() if f.suffix.lower() == ".fit"]

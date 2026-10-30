@@ -507,13 +507,12 @@ def parse_points_to_tcx(sport_data, points_dict_list):
         else:
             break
 
-        if idx + 1 != len(points_dict_list):
-            if (
-                item["distance"]
-                < target_distance
-                <= points_dict_list[idx + 1]["distance"]
-            ):
-                lap_split_indexes.append(idx)
+        if idx + 1 != len(points_dict_list) and (
+            item["distance"]
+            < target_distance
+            <= points_dict_list[idx + 1]["distance"]
+        ):
+            lap_split_indexes.append(idx)
 
     if len(lap_split_indexes) == 1:
         points_dict_list_chunks = [points_dict_list]
