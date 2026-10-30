@@ -270,7 +270,8 @@ class Generator:
 
     def load(self):
         # if sub_type is not in the db, just add an empty string to it
-        query = self.session.query(Activity).filter(Activity.distance > 0.1)
+        # Include all activities; only activities with distance contribute to streak.
+        query = self.session.query(Activity)
         if self.only_run:
             query = query.filter(Activity.type == "Run")
 
@@ -280,21 +281,23 @@ class Generator:
         streak = 0
         last_date = None
         for activity in activities:
-            # Determine running streak.
-            date = datetime.datetime.strptime(
-                activity.start_date_local, "%Y-%m-%d %H:%M:%S"  # type: ignore
-            ).date()
-            if last_date is None:
-                streak = 1
-            elif date == last_date:
-                pass
-            elif date == last_date + datetime.timedelta(days=1):
-                streak += 1
+            if (activity.distance or 0) > 0.1:
+                date = datetime.datetime.strptime(
+                    activity.start_date_local, "%Y-%m-%d %H:%M:%S"
+                ).date()
+                if last_date is None:
+                    streak = 1
+                elif date == last_date:
+                    pass
+                elif date == last_date + datetime.timedelta(days=1):
+                    streak += 1
+                else:
+                    assert date > last_date
+                    streak = 1
+                activity.streak = streak
+                last_date = date
             else:
-                assert date > last_date
-                streak = 1
-            activity.streak = streak  # type: ignore
-            last_date = date
+                activity.streak = 0
             if not IGNORE_BEFORE_SAVING:
                 activity.summary_polyline = filter_out(activity.summary_polyline)  # type: ignore
             activity_list.append(activity.to_dict())

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import * as polyline from '@mapbox/polyline';
 import type { Activity, SportFilter } from '../types';
 import { useLocale } from '../hooks/useLocale';
 import { extractProvince } from '../hooks/useActivities';
@@ -13,10 +14,9 @@ interface SpainMapProps {
 type GeoFeature = {
   type: 'Feature';
   properties: { name: string };
-  geometry: {
-    type: 'Polygon' | 'MultiPolygon';
-    coordinates: number[][][][];
-  };
+  geometry:
+    | { type: 'Polygon'; coordinates: number[][][] }
+    | { type: 'MultiPolygon'; coordinates: number[][][][] };
 };
 
 type GeoData = {
@@ -24,7 +24,108 @@ type GeoData = {
   features: GeoFeature[];
 };
 
+type ProvincePolygon = {
+  rings: number[][][];
+  minLng: number;
+  maxLng: number;
+  minLat: number;
+  maxLat: number;
+};
+
+type PreparedProvince = {
+  name: string;
+  polygons: ProvincePolygon[];
+};
+
 const BOUNDS = { minLng: -9.5, maxLng: 4.5, minLat: 35.5, maxLat: 44.2 };
+
+function prepareProvince(feature: GeoFeature): PreparedProvince {
+  const polygons =
+    feature.geometry.type === 'Polygon'
+      ? [feature.geometry.coordinates]
+      : feature.geometry.coordinates;
+
+  return {
+    name: feature.properties.name,
+    polygons: polygons.map((rings) => {
+      const outerRing = rings[0] || [];
+      const longitudes = outerRing.map((point) => point[0]);
+      const latitudes = outerRing.map((point) => point[1]);
+
+      return {
+        rings,
+        minLng: Math.min(...longitudes),
+        maxLng: Math.max(...longitudes),
+        minLat: Math.min(...latitudes),
+        maxLat: Math.max(...latitudes),
+      };
+    }),
+  };
+}
+
+function pointInRing(
+  lng: number,
+  lat: number,
+  ring: number[][]
+): boolean {
+  let inside = false;
+
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i];
+    const [xj, yj] = ring[j];
+
+    const intersects =
+      (yi > lat) !== (yj > lat) &&
+      lng < ((xj - xi) * (lat - yi)) / (yj - yi) + xi;
+
+    if (intersects) inside = !inside;
+  }
+
+  return inside;
+}
+
+function pointInPolygon(
+  lng: number,
+  lat: number,
+  polygon: ProvincePolygon
+): boolean {
+  if (
+    lng < polygon.minLng ||
+    lng > polygon.maxLng ||
+    lat < polygon.minLat ||
+    lat > polygon.maxLat
+  ) {
+    return false;
+  }
+
+  const outerRing = polygon.rings[0];
+  if (!outerRing || !pointInRing(lng, lat, outerRing)) return false;
+
+  // Exclude holes inside the polygon.
+  for (const hole of polygon.rings.slice(1)) {
+    if (pointInRing(lng, lat, hole)) return false;
+  }
+
+  return true;
+}
+
+function findProvince(
+  lng: number,
+  lat: number,
+  provinces: PreparedProvince[]
+): string | null {
+  for (const province of provinces) {
+    if (
+      province.polygons.some((polygon) =>
+        pointInPolygon(lng, lat, polygon)
+      )
+    ) {
+      return province.name;
+    }
+  }
+
+  return null;
+}
 
 function project(
   lng: number,
@@ -51,16 +152,19 @@ function ringToPath(ring: number[][], w: number, h: number): string {
 function featureToPath(feature: GeoFeature, w: number, h: number): string {
   const geom = feature.geometry;
   if (!geom) return '';
+
   if (geom.type === 'Polygon') {
     return geom.coordinates
-      .map((ring) => ringToPath(ring as unknown as number[][], w, h))
+      .map((ring) => ringToPath(ring, w, h))
       .join(' ');
   }
+
   if (geom.type === 'MultiPolygon') {
     return geom.coordinates
       .map((poly) => poly.map((ring) => ringToPath(ring, w, h)).join(' '))
       .join(' ');
   }
+
   return '';
 }
 
@@ -72,32 +176,32 @@ export function SpainMap({
 }: SpainMapProps) {
   const { locale } = useLocale();
   const [geoData, setGeoData] = useState<GeoData | null>(null);
-  const [visitedProvinces, setVisitedProvinces] = useState<Set<string>>(
-    new Set()
-  );
   const [hoveredProvince, setHoveredProvince] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch Map GeoJSON and lean Visited Provinces JSON in parallel
-    Promise.all([
-      fetch(`${import.meta.env.BASE_URL}static/spain-provinces.geojson`).then(
-        (res) => res.json()
-      ),
-      fetch(`${import.meta.env.BASE_URL}visited-provinces.json`)
-        .then((res) => res.json())
-        .catch(() => ({ visited: [] })),
-    ])
-      .then(([geoJsonData, visitedData]) => {
+    fetch(`${import.meta.env.BASE_URL}static/spain-provinces.geojson`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`GeoJSON request failed: ${res.status}`);
+        }
+        return res.json() as Promise<GeoData>;
+      })
+      .then((geoJsonData) => {
         setGeoData(geoJsonData);
-        setVisitedProvinces(new Set(visitedData.visited || []));
       })
       .catch((err) => console.error('Failed to load map static assets:', err));
   }, []);
 
-  // Compute local activity counts if activity details exist in memory
+  const preparedProvinces = useMemo(
+    () => geoData?.features.map(prepareProvince) || [],
+    [geoData]
+  );
+
+  // Detect provinces from real GPS routes, with location text as fallback.
   const provinceCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     const safeActivities = activities || [];
+
     const filtered =
       filter === 'all'
         ? safeActivities
@@ -105,13 +209,53 @@ export function SpainMap({
 
     for (const act of filtered) {
       if (!act) continue;
-      const prov = extractProvince(act.location_country);
-      if (prov) {
-        counts[prov] = (counts[prov] || 0) + 1;
+
+      // Indoor/treadmill routes may have borrowed GPS paths.
+      const subtype = String(act.subtype || '').toLowerCase();
+      if (subtype === 'indoor' || subtype === 'treadmill') continue;
+
+      const provincesForActivity = new Set<string>();
+      const encodedRoute = act.summary_polyline;
+
+      if (encodedRoute && preparedProvinces.length > 0) {
+        try {
+          // polyline.decode returns [latitude, longitude].
+          const points = polyline.decode(encodedRoute);
+
+          for (const [lat, lng] of points) {
+            if (
+              !Number.isFinite(lat) ||
+              !Number.isFinite(lng) ||
+              lng < BOUNDS.minLng ||
+              lng > BOUNDS.maxLng ||
+              lat < BOUNDS.minLat ||
+              lat > BOUNDS.maxLat
+            ) {
+              continue;
+            }
+
+            const province = findProvince(lng, lat, preparedProvinces);
+            if (province) provincesForActivity.add(province);
+          }
+        } catch {
+          // Invalid polylines fall back to the location text.
+        }
+      }
+
+      // Use reverse-geocoded location only if GPS did not identify a province.
+      if (provincesForActivity.size === 0) {
+        const province = extractProvince(act.location_country);
+        if (province) provincesForActivity.add(province);
+      }
+
+      // Count an activity once per province.
+      for (const province of provincesForActivity) {
+        counts[province] = (counts[province] || 0) + 1;
       }
     }
+
     return counts;
-  }, [activities, filter]);
+  }, [activities, filter, preparedProvinces]);
 
   const SVG_W = 400;
   const SVG_H = 220;
@@ -126,6 +270,7 @@ export function SpainMap({
 
   const handleClick = (name: string) => {
     if (!onSelectProvince) return;
+
     if (selectedProvince === name) {
       onSelectProvince(null);
     } else {
@@ -168,13 +313,12 @@ export function SpainMap({
             const name = feature.properties?.name;
             if (!name) return null;
 
-            // Checked against the visited JSON set OR dynamic activity counts
-            const visited =
-              visitedProvinces.has(name) || (provinceCounts[name] || 0) > 0;
+            const visited = (provinceCounts[name] || 0) > 0;
             const isSelected = selectedProvince === name;
             const isHovered = hoveredProvince === name;
 
             let fill = 'var(--color-border)';
+
             if (visited) {
               if (isSelected || isHovered) {
                 fill = 'var(--color-accent)';
