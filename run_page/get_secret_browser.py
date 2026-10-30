@@ -1,9 +1,7 @@
-import base64
-import json
 import re
-from pathlib import Path
-from playwright.sync_api import sync_playwright
+
 import garth
+from playwright.sync_api import sync_playwright
 
 print("Launching interactive browser...")
 

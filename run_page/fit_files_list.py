@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 """
 Created on Mon Aug  3 16:31:50 2026
 
 @author: irvin
 """
 
-import os
 from pathlib import Path
 
 # Adjust this path to wherever your backup FIT_OUT folder is located
@@ -23,8 +21,7 @@ if not BACKUP_FIT_OUT.exists():
 fit_files = [f.name for f in BACKUP_FIT_OUT.iterdir() if f.suffix.lower() == ".fit"]
 
 with open(OUTPUT_TXT, "w", encoding="utf-8") as f:
-    for filename in fit_files:
-        f.write(f"{filename}\n")
+    f.writelines(f"{filename}\n" for filename in fit_files)
 
 print(
     f"Successfully recorded {len(fit_files)} file names into '{OUTPUT_TXT.resolve()}'"

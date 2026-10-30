@@ -1,5 +1,5 @@
-import os
 from pathlib import Path
+
 from garminconnect import Garmin
 
 EMAIL = "irving@bennett.com.pa"
