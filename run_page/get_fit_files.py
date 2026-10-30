@@ -12,11 +12,7 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 print("Logging into Garmin Connect...")
 
 # Pass prompt_mfa callback to supply the token
-client = Garmin(
-    email=EMAIL,
-    password=PASSWORD,
-    prompt_mfa=lambda: MFA_CODE
-)
+client = Garmin(email=EMAIL, password=PASSWORD, prompt_mfa=lambda: MFA_CODE)
 
 # Login will output/cache persistent session tokens in ~/.garminconnect/
 client.login()
@@ -28,17 +24,21 @@ for activity in activities:
     activity_id = activity["activityId"]
     activity_name = activity.get("activityName", "Activity")
     start_time = activity.get("startTimeLocal", "")
-    
+
     fit_path = OUTPUT_DIR / f"{activity_id}.fit"
-    
+
     if fit_path.exists():
         print(f"Skipping {activity_id} ({activity_name}) - already downloaded.")
         continue
 
-    print(f"Downloading FIT file for Activity {activity_id}: {activity_name} ({start_time})...")
+    print(
+        f"Downloading FIT file for Activity {activity_id}: {activity_name} ({start_time})..."
+    )
     try:
-        fit_data = client.download_activity(activity_id, dl_fmt=Garmin.ActivityDownloadFormat.ORIGINAL)
-        
+        fit_data = client.download_activity(
+            activity_id, dl_fmt=Garmin.ActivityDownloadFormat.ORIGINAL
+        )
+
         with open(fit_path, "wb") as f:
             f.write(fit_data)
         print(f"Saved: {fit_path}")

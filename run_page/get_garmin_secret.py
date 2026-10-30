@@ -3,16 +3,26 @@ import getpass
 import garth
 
 # Override HTTP headers to bypass Cloudflare 429 / bot detection
-garth.client.sess.headers.update({
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-    "Accept": "application/json, text/plain, */*",
-    "Accept-Language": "en-US,en;q=0.9",
-})
+garth.client.sess.headers.update(
+    {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "en-US,en;q=0.9",
+    }
+)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Get Garmin secret token for running_page")
-    parser.add_argument("email", nargs="?", help="Email associated with your Garmin Connect account")
-    parser.add_argument("password", nargs="?", help="Password associated with your Garmin Connect account")
+    parser = argparse.ArgumentParser(
+        description="Get Garmin secret token for running_page"
+    )
+    parser.add_argument(
+        "email", nargs="?", help="Email associated with your Garmin Connect account"
+    )
+    parser.add_argument(
+        "password",
+        nargs="?",
+        help="Password associated with your Garmin Connect account",
+    )
     parser.add_argument(
         "--is-cn",
         dest="is_cn",
@@ -29,7 +39,11 @@ if __name__ == "__main__":
 
     # Prompt for 2FA/MFA code if Garmin requests verification
     try:
-        garth.login(email, password, prompt_mfa=lambda: input("Enter Garmin 2FA / Verification Code: "))
+        garth.login(
+            email,
+            password,
+            prompt_mfa=lambda: input("Enter Garmin 2FA / Verification Code: "),
+        )
     except TypeError:
         # Fallback for older Garth versions that don't support prompt_mfa parameter
         garth.login(email, password)

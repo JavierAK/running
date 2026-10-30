@@ -1,0 +1,410 @@
+
+==========================================
+2026-10-30 09:32:19
+Actualización running_page
+==========================================
+ERROR: no existe el entorno virtual:
+/home/javierak/git/running_page/.venv/bin/activate
+
+==========================================
+2026-10-30 09:34:13
+Actualización running_page
+==========================================
+
+1. Descargando actividades desde Garmin...
+
+Desde: 2026-10-29
+Hasta: 2026-10-30
+Traceback (most recent call last):
+  File "/home/javierak/git/python-garminconnect/descargar_todo.py", line 9, in <module>
+    from garminconnect import Garmin
+  File "/home/javierak/git/python-garminconnect/garminconnect/__init__.py", line 23, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+ERROR descargando actividades Garmin.
+
+==========================================
+2026-10-30 09:54:45
+Actualización running_page
+==========================================
+
+1. Descargando actividades desde Garmin...
+
+Desde: 2026-10-29
+Hasta: 2026-10-30
+============================================================
+Garmin - descarga completa FIT + GPX
+============================================================
+
+Tokens : /home/javierak/git/garmin-grafana/garminconnect-tokens/garmin_tokens.json
+Salida : /home/javierak/git/running_page
+Desde  : 2026-10-29
+Hasta  : 2026-10-30
+
+Conectando con Garmin...
+Autenticación OK.
+
+Obteniendo actividades...
+Actividades encontradas: 1
+
+[1/1] 24893687687 | Elíptica | 2026-10-29 14:20:39
+    FIT: ya existe
+    GPX: ya existe
+
+============================================================
+RESUMEN
+============================================================
+Actividades      : 1
+FIT descargados  : 0
+GPX descargados  : 0
+Completos/previos: 1
+Errores          : 0
+
+FIT: /home/javierak/git/running_page/FIT_OUT
+GPX: /home/javierak/git/running_page/GPX_OUT
+
+2. Sincronizando GPX con running_page...
+
+only sync gpx files in GPX_OUT
+GPX files: 19
+Something went wrong when loading GPX. for file 24787021246.gpx, we just ignore this file and continue
+Something went wrong when loading GPX. for file 24775213799.gpx, we just ignore this file and continue
+Something went wrong when loading GPX. for file 24854094267.gpx, we just ignore this file and continue
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+Something went wrong when loading GPX. for file 24562659753.gpx, we just ignore this file and continue
+Something went wrong when loading GPX. for file 24893687687.gpx, we just ignore this file and continue
+Something went wrong when loading GPX. for file 24810868874.gpx, we just ignore this file and continue
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+Something went wrong when loading GPX. for file 24765756888.gpx, we just ignore this file and continue
+Something went wrong when loading GPX. for file 24622790534.gpx, we just ignore this file and continue
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+Something went wrong when loading GPX. for file 24659828931.gpx, we just ignore this file and continue
+Something went wrong when loading GPX. for file 24885804452.gpx, we just ignore this file and continue
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+Something went wrong when loading GPX. for file 24717931115.gpx, we just ignore this file and continue
+Something went wrong when loading GPX. for file 24610495035.gpx, we just ignore this file and continue
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+Something went wrong when loading GPX. for file 24582401258.gpx, we just ignore this file and continue
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+Something went wrong when loading GPX. for file 24828469039.gpx, we just ignore this file and continue
+Something went wrong when loading GPX. for file 24771435622.gpx, we just ignore this file and continue
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+Something went wrong when loading GPX. for file 24670223563.gpx, we just ignore this file and continue
+Something went wrong when loading GPX. for file 24839526440.gpx, we just ignore this file and continue
+Something went wrong when loading GPX. for file 24749128256.gpx, we just ignore this file and continue
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+Something went wrong when loading GPX. for file 24607004086.gpx, we just ignore this file and continue
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+load 0 tracks
+No tracks found.
+
+3. Estado Git:
+ M src/static/activities.json
+?? .update.lock
+?? FIT_OUT/24562659753.fit
+?? FIT_OUT/24582401258.fit
+?? FIT_OUT/24607004086.fit
+?? FIT_OUT/24610495035.fit
+?? FIT_OUT/24622790534.fit
+?? FIT_OUT/24659828931.fit
+?? FIT_OUT/24670223563.fit
+?? FIT_OUT/24717931115.fit
+?? FIT_OUT/24749128256.fit
+?? FIT_OUT/24765756888.fit
+?? FIT_OUT/24771435622.fit
+?? FIT_OUT/24775213799.fit
+?? FIT_OUT/24787021246.fit
+?? FIT_OUT/24810868874.fit
+?? FIT_OUT/24828469039.fit
+?? FIT_OUT/24839526440.fit
+?? FIT_OUT/24854094267.fit
+?? FIT_OUT/24885804452.fit
+?? FIT_OUT/24893687687.fit
+?? GPX_OUT/24562659753.gpx
+?? GPX_OUT/24582401258.gpx
+?? GPX_OUT/24607004086.gpx
+?? GPX_OUT/24610495035.gpx
+?? GPX_OUT/24622790534.gpx
+?? GPX_OUT/24659828931.gpx
+?? GPX_OUT/24670223563.gpx
+?? GPX_OUT/24717931115.gpx
+?? GPX_OUT/24749128256.gpx
+?? GPX_OUT/24765756888.gpx
+?? GPX_OUT/24771435622.gpx
+?? GPX_OUT/24775213799.gpx
+?? GPX_OUT/24787021246.gpx
+?? GPX_OUT/24810868874.gpx
+?? GPX_OUT/24828469039.gpx
+?? GPX_OUT/24839526440.gpx
+?? GPX_OUT/24854094267.gpx
+?? GPX_OUT/24885804452.gpx
+?? GPX_OUT/24893687687.gpx
+?? actualizar.sh
+?? logs/
+
+4. Cambios detectados. Creando commit...
+[main cb576d9] Update Garmin activities
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+5. Subiendo cambios a GitHub...
+To github.com:JavierAK/running.git
+   bba5287..cb576d9  main -> main
+
+==========================================
+2026-10-30 09:54:52
+Actualización completada correctamente.
+==========================================
+
+==========================================
+2026-10-30 09:56:32
+Actualización running_page
+==========================================
+
+1. Descargando actividades desde Garmin...
+
+Desde: 2026-10-29
+Hasta: 2026-10-30
+============================================================
+Garmin - descarga completa FIT + GPX
+============================================================
+
+Tokens : /home/javierak/git/garmin-grafana/garminconnect-tokens/garmin_tokens.json
+Salida : /home/javierak/git/running_page
+Desde  : 2026-10-29
+Hasta  : 2026-10-30
+
+Conectando con Garmin...
+Autenticación OK.
+
+Obteniendo actividades...
+Actividades encontradas: 1
+
+[1/1] 24893687687 | Elíptica | 2026-10-29 14:20:39
+    FIT: descargando...
+    FIT: OK (107,692 bytes)
+    GPX: descargando...
+    GPX: OK (655 bytes)
+
+============================================================
+RESUMEN
+============================================================
+Actividades      : 1
+FIT descargados  : 1
+GPX descargados  : 1
+Completos/previos: 1
+Errores          : 0
+
+FIT: /home/javierak/git/running_page/FIT_OUT
+GPX: /home/javierak/git/running_page/GPX_OUT
+
+2. Sincronizando GPX con running_page...
+
+only sync gpx files in GPX_OUT
+GPX files: 1
+Something went wrong when loading GPX. for file 24893687687.gpx, we just ignore this file and continue
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+load 0 tracks
+No tracks found.
+
+3. Estado Git:
+?? .update.lock
+?? FIT_OUT/24893687687.fit
+?? GPX_OUT/24893687687.gpx
+?? actualizar.sh
+?? logs/
+
+No hay cambios en activities.json.
+No se hace commit ni push.
+
+==========================================
+2026-10-30 10:00:01
+Actualización running_page
+==========================================
+
+1. Descargando actividades desde Garmin...
+
+Desde: 2026-10-29
+Hasta: 2026-10-30
+============================================================
+Garmin - descarga completa FIT + GPX
+============================================================
+
+Tokens : /home/javierak/git/garmin-grafana/garminconnect-tokens/garmin_tokens.json
+Salida : /home/javierak/git/running_page
+Desde  : 2026-10-29
+Hasta  : 2026-10-30
+
+Conectando con Garmin...
+Autenticación OK.
+
+Obteniendo actividades...
+Actividades encontradas: 1
+
+[1/1] 24893687687 | Elíptica | 2026-10-29 14:20:39
+    FIT: ya existe
+    GPX: ya existe
+
+============================================================
+RESUMEN
+============================================================
+Actividades      : 1
+FIT descargados  : 0
+GPX descargados  : 0
+Completos/previos: 1
+Errores          : 0
+
+FIT: /home/javierak/git/running_page/FIT_OUT
+GPX: /home/javierak/git/running_page/GPX_OUT
+
+2. Sincronizando GPX con running_page...
+
+only sync gpx files in GPX_OUT
+GPX files: 1
+Something went wrong when loading GPX. for file 24893687687.gpx, we just ignore 
+this file and continue
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 
+'NoneType' object
+load 0 tracks
+No tracks found.
+
+3. Estado Git:
+?? .github/workflows/.run_data_sync.yml.swp
+?? .update.lock
+?? FIT_OUT/24893687687.fit
+?? GPX_OUT/24893687687.gpx
+?? actualizar.sh
+?? logs/
+
+No hay cambios en activities.json.
+No se hace commit ni push.
+
+==========================================
+2026-10-30 10:12:55
+Actualización running_page
+==========================================
+actualizar.sh: 44: source: not found
+
+1. Descargando actividades desde Garmin...
+
+Desde: 2026-10-29
+Hasta: 2026-10-30
+============================================================
+Garmin - descarga completa FIT + GPX
+============================================================
+
+Tokens : /home/javierak/git/garmin-grafana/garminconnect-tokens/garmin_tokens.json
+Salida : /home/javierak/git/running_page
+Desde  : 2026-10-29
+Hasta  : 2026-10-30
+
+Conectando con Garmin...
+Autenticación OK.
+
+Obteniendo actividades...
+Actividades encontradas: 1
+
+[1/1] 24893687687 | Elíptica | 2026-10-29 14:20:39
+    FIT: ya existe
+    GPX: ya existe
+
+============================================================
+RESUMEN
+============================================================
+Actividades      : 1
+FIT descargados  : 0
+GPX descargados  : 0
+Completos/previos: 1
+Errores          : 0
+
+FIT: /home/javierak/git/running_page/FIT_OUT
+GPX: /home/javierak/git/running_page/GPX_OUT
+
+2. Sincronizando GPX con running_page...
+
+only sync gpx files in GPX_OUT
+GPX files: 1
+Something went wrong when loading GPX. for file 24893687687.gpx, we just ignore this file and continue
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+load 0 tracks
+No tracks found.
+
+3. Estado Git:
+?? .update.lock
+?? FIT_OUT/24893687687.fit
+?? GPX_OUT/24893687687.gpx
+?? actualizar.sh
+?? logs/
+
+No hay cambios en activities.json.
+No se hace commit ni push.
+
+==========================================
+2026-10-30 10:13:28
+Actualización running_page
+==========================================
+actualizar.sh: 44: source: not found
+
+1. Descargando actividades desde Garmin...
+
+Desde: 2026-10-29
+Hasta: 2026-10-30
+============================================================
+Garmin - descarga completa FIT + GPX
+============================================================
+
+Tokens : /home/javierak/git/garmin-grafana/garminconnect-tokens/garmin_tokens.json
+Salida : /home/javierak/git/running_page
+Desde  : 2026-10-29
+Hasta  : 2026-10-30
+
+Conectando con Garmin...
+Autenticación OK.
+
+Obteniendo actividades...
+Actividades encontradas: 1
+
+[1/1] 24893687687 | Elíptica | 2026-10-29 14:20:39
+    FIT: ya existe
+    GPX: ya existe
+
+============================================================
+RESUMEN
+============================================================
+Actividades      : 1
+FIT descargados  : 0
+GPX descargados  : 0
+Completos/previos: 1
+Errores          : 0
+
+FIT: /home/javierak/git/running_page/FIT_OUT
+GPX: /home/javierak/git/running_page/GPX_OUT
+
+2. Sincronizando GPX con running_page...
+
+only sync gpx files in GPX_OUT
+GPX files: 1
+Something went wrong when loading GPX. for file 24893687687.gpx, we just ignore this file and continue
+descriptor 'timestamp' for 'datetime.datetime' objects doesn't apply to a 'NoneType' object
+load 0 tracks
+No tracks found.
+
+3. Estado Git:
+ M requirements.txt
+?? .update.lock
+?? FIT_OUT/24893687687.fit
+?? GPX_OUT/24893687687.gpx
+?? actualizar.sh
+?? logs/
+
+No hay cambios en activities.json.
+No se hace commit ni push.
