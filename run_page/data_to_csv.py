@@ -4,9 +4,7 @@ try:
     import pandas as pd
 
 except ImportError as e:
-    raise ImportError(
-        "Please install pandas: pip3 install pandas"
-    ) from e
+    raise ImportError("Please install pandas: pip3 install pandas") from e
 from math import floor
 
 data = sqlite3.connect("run_page/data.db")
@@ -16,9 +14,10 @@ df = pd.read_sql_query("SELECT * FROM activities", data)
 def apply_duration_time(d):
     try:
         return d.split()[1].split(".")[0]
-	except (AttributeError, IndexError) as e:
-    		print(f"Error applying duration time: {e}")
-    		return ""
+    except (AttributeError, IndexError) as e:
+        print(f"Error applying duration time: {e}")
+        return ""
+
 
 # we do not need polyline in csv
 df = df.drop("summary_polyline", axis=1)
