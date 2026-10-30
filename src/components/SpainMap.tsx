@@ -80,7 +80,9 @@ export function SpainMap({
   useEffect(() => {
     // Fetch Map GeoJSON and lean Visited Provinces JSON in parallel
     Promise.all([
-      fetch(`${import.meta.env.BASE_URL}static/spain-provinces.geojson`).then((res) => res.json()),
+      fetch(`${import.meta.env.BASE_URL}static/spain-provinces.geojson`).then(
+        (res) => res.json()
+      ),
       fetch(`${import.meta.env.BASE_URL}visited-provinces.json`)
         .then((res) => res.json())
         .catch(() => ({ visited: [] })),
